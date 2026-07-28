@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RENEW — Rundown Outing FCTE 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAFAFA;
+    --ink:#181818;
+    --ink-soft:#555555;
+    --line:#cccccc;
+    --blue:#2b2b2b;
+    --blue-soft:#ececec;
+    --amber:#181818;
+    --amber-soft:#ebebeb;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Archivo', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+  }
+
+  /* header / hero */
+  .hero{
+    position:relative;
+    padding:40px 20px 28px;
+    text-align:center;
+    border-bottom:2px solid var(--ink);
+    background:var(--paper);
+  }
+  .hero .crop{
+    position:absolute;
+    width:16px;height:16px;
+    border-top:2px solid var(--ink);
+    border-left:2px solid var(--ink);
+    top:14px;left:14px;
+  }
+  .hero .crop.tr{left:auto;right:14px;border-left:none;border-right:2px solid var(--ink);}
+  .hero .crop.bl{top:auto;bottom:14px;border-top:none;border-bottom:2px solid var(--ink);}
+  .hero .crop.br{top:auto;bottom:14px;left:auto;right:14px;border-top:none;border-left:none;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.2em;
+    color:var(--blue);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  h1.title{
+    font-family:'Archivo Black', sans-serif;
+    font-size:clamp(40px,11vw,72px);
+    line-height:.92;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .verse{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    letter-spacing:.15em;
+    margin-top:12px;
+    color:var(--ink-soft);
+  }
+  .verse::before, .verse::after{content:"✚"; color:var(--amber); margin:0 8px; font-size:10px;}
+
+  /* sticky day nav */
+  .daynav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    display:flex;
+    background:var(--ink);
+    border-bottom:2px solid var(--ink);
+  }
+  .daynav button{
+    flex:1;
+    background:transparent;
+    border:none;
+    border-right:1px solid rgba(255,255,255,.15);
+    color:rgba(255,255,255,.55);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:14px 8px;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  .daynav button:last-child{border-right:none;}
+  .daynav button.active{
+    background:var(--amber);
+    color:var(--white);
+    font-weight:700;
+  }
+  .daynav button:not(.active):hover{ color:var(--white); }
+
+  main{max-width:760px; margin:0 auto; padding:28px 16px 10px;}
+
+  .daypanel{display:none;}
+  .daypanel.active{display:block; animation:fade .25s ease;}
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .daymeta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    background:var(--white);
+    border:1px solid var(--line);
+    border-left:4px solid var(--blue);
+    padding:12px 14px;
+    margin-bottom:22px;
+    line-height:1.6;
+  }
+  .daymeta b{color:var(--ink);}
+
+  /* timeline */
+  .slot{
+    position:relative;
+    display:flex;
+    gap:14px;
+    padding:14px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .slot:last-child{border-bottom:none;}
+  .time{
+    flex:0 0 92px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--blue);
+    padding-top:2px;
+    white-space:nowrap;
+  }
+  .content{flex:1; min-width:0;}
+  .label{
+    font-weight:700;
+    font-size:15px;
+    margin:0 0 4px;
+  }
+  .desc{
+    font-size:14px;
+    color:var(--ink-soft);
+    line-height:1.55;
+    margin:0;
+  }
+  .desc ol, .desc ul{margin:6px 0 0; padding-left:18px;}
+  .desc li{margin-bottom:3px;}
+
+  .tag{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:2px 7px;
+    border-radius:2px;
+    margin-right:6px;
+    vertical-align:middle;
+  }
+  .tag.mc{ background:var(--amber); color:var(--white); }
+  .tag.pw{ background:var(--blue-soft); color:var(--blue); border:1px solid var(--blue); }
+  .tag.game{ background:#e9e2d0; color:#5c4a1e; border:1px solid #b89a4d; }
+
+  .slot.highlight{
+    background:var(--amber-soft);
+    margin:0 -14px;
+    padding:14px;
+    border-bottom:1px dashed var(--line);
+    border-radius:2px;
+  }
+
+  .quote-box{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    background:var(--ink);
+    color:var(--paper);
+    padding:16px;
+    margin:20px 0;
+    text-align:center;
+    line-height:1.6;
+  }
+
+  h2.sectitle{
+    font-family:'Archivo Black', sans-serif;
+    font-size:20px;
+    margin:34px 0 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  h2.sectitle::before{
+    content:"";
+    width:20px;height:20px;
+    border:2px solid var(--ink);
+    display:inline-block;
+    transform:rotate(45deg);
+  }
+
+  table.ref{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+    margin-bottom:10px;
+  }
+  table.ref th, table.ref td{
+    border:1px solid var(--line);
+    padding:8px 10px;
+    text-align:left;
+  }
+  table.ref th{
+    background:var(--ink);
+    color:var(--white);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+  table.ref tr:nth-child(even) td{ background:var(--white); }
+
+  .picgrid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .piccard{
+    background:var(--white);
+    border:1px solid var(--line);
+    padding:10px 12px;
+    font-size:13.5px;
+  }
+  .piccard b{display:block; font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--blue); text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px;}
+
+  footer{
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    padding:30px 16px 10px;
+  }
+
+  @media (min-width:600px){
+    .picgrid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="crop tl"></span><span class="crop tr"></span><span class="crop bl"></span><span class="crop br"></span>
+  <div class="eyebrow">Outing FCTE · 2026</div>
+  <h1 class="title">RENEW</h1>
+  <div class="verse">ROMANS 12:2</div>
+</div>
+
+<div class="daynav">
+  <button class="active" data-day="1">Day 1</button>
+  <button data-day="2">Day 2</button>
+  <button data-day="3">Day 3</button>
+  <button data-day="ref">Referensi</button>
+</div>
+
+<main>
+
+  <!-- DAY 1 -->
+  <section class="daypanel active" id="day-1">
+    <div class="daymeta">
+      <b>Lokasi:</b> Grand 3G Resort, Puncak<br>
+      Peserta diharapkan tiba jam <b>10.00</b> (info ke peserta: kumpul jam 08.00–08.30).<br>
+      Sampai di resort → langsung diarahkan ke <b>Hall Pinus 3</b>, briefing mulai jam 11.00. Lunch jam 12.00, sementara ada welcome snack <i>(PIC Makanan: Ci Lily)</i>.
+    </div>
+
+    <div class="slot"><div class="time">10.30–11.00</div><div class="content"><p class="label">Persiapan</p><p class="desc">Peserta masuk hall.</p></div></div>
+
+    <div class="slot highlight">
+      <div class="time">11.00</div>
+      <div class="content">
+        <p class="label"><span class="tag mc">MC</span>Opening — Andrew</p>
+        <p class="desc">Pakai gestur seru!
+          <ol>
+            <li>Infokan tema Outing "Renew" + ayat Roma 12:2</li>
+            <li>Infokan bagi kamar</li>
+            <li>Infokan bagi team (Merah/Kuning/Biru/Hijau) — lanyard ada schedule + gelang captain</li>
+            <li>Infokan panitia: gelang item panitia</li>
+            <li>PIC medis: Reka (kalau butuh obat)</li>
+            <li>Bagikan starter kit (jelasin isi: t-shirt day 3, buku catatan, pen, souvenir)</li>
+          </ol>
+        </p>
+      </div>
+    </div>
+
+    <div class="slot"><div class="time">12.00–12.30</div><div class="content"><p class="label">Lunch & Free Time</p></div></div>
+    <div class="slot"><div class="time">12.30–13.00</div><div class="content"><p class="label"><span class="tag pw">PW</span>Latihan PW Sesi 1</p></div></div>
+
+    <div class="slot">
+      <div class="time">13.00–13.30</div>
+      <div class="content"><p class="label"><span class="tag game">Games</span>Games Pembuka — Games 1</p><p class="desc">Lead: Thomas & Jojo</p></div>
+    </div>
+    <div class="slot"><div class="time">13.30–14.00</div><div class="content"><p class="label"><span class="tag game">Games</span>Games 2</p></div></div>
+
+    <div class="slot">
+      <div class="time">15.00–15.30</div>
+      <div class="content">
+        <p class="label">Kata Sambutan & Video Opening</p>
+        <p class="desc">
+          1) Kata sambutan Gembala Ko Thomas <i>(kalau ga sesuai timeline, langsung start abis games)</i><br>
+          2) Putar video opening by Didi<br>
+          3) <span class="tag pw">PW</span> Sesi 1 (WL: Vina — Gitar: Vindo, Keyboard: Nathan, Cajon: Reo, Bass: Joko)
+        </p>
+      </div>
+    </div>
+
+    <div class="slot highlight">
+      <div class="time">16.30–17.00</div>
+      <div class="content">
+        <p class="label"><span class="tag mc">MC</span>Sesi 1 — Ko Jack</p>
+        <p class="desc">MC sapa & ucapin thank you ke Ko Jack & Team. Selesai sesi, MC panggil Ko Thomas ke depan untuk QnA.</p>
+      </div>
+    </div>
+
+    <div class="slot highlight">
+      <div class="time">17.00–17.30</div>
+      <div class="content">
+        <p class="label"><span class="tag mc">MC</span>QnA</p>
+        <p class="desc">Ko Thomas & Andrew + Ko Jack (duduk pakai kursi) + mic pertanyaan dari peserta.</p>
+      </div>
+    </div>
+
+    <div class="slot highlight">
+      <div class="time">17.30–18.00</div>
+      <div class="content">
+        <p class="label"><span class="tag mc">MC</span>Umumkan Dinner</p>
+        <p class="desc"><b>Dinner + Free Time</b> — boleh mandi/istirahat, prepare sebelum sesi jam 19.00. → <i>Next session: MC Acoy & Toge</i></p>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="time">19.00–19.30</div>
+      <div class="content"><p class="label"><span class="tag mc">MC</span><span class="tag game">Games</span>Games 3 — Toge & Acoy</p><p class="desc">Buka acara dengan gestur semangat walau sudah malam.</p></div>
+    </div>
+
+    <div class="slot"><div class="time">19.30–20.00</div><div class="content"><p class="label"><span class="tag pw">PW</span>Sesi 2</p><p class="desc">WL: Vindo — Gitar: Reo, Keyboard: Vina, Cajon: Nathan, Bass: Joko</p></div></div>
+    <div class="slot"><div class="time">20.30–21.00</div><div class="content"><p class="label">FT Sesi 2 — Reka</p></div></div>
+
+    <div class="slot highlight">
+      <div class="time">21.00–21.30</div>
+      <div class="content">
+        <p class="label"><span class="tag mc">MC</span>Bubarin Acara + Info Community</p>
+        <p class="desc">Info <b>WA Community Group</b> (dijelasin Ci Reka & Andrew, tampilin slide topic + jelasin maksud tema). Info: besok kumpul jam 09.00, breakfast sudah ada dari jam 07.00.</p>
+      </div>
+    </div>
+
+    <div class="quote-box">💡 Kalau MC mau improv testimony/quiz butuh hadiah → tersedia 3 hadiah per hari.</div>
+  </section>
+
+  <!-- DAY 2 -->
+  <section class="daypanel" id="day-2">
+    <div class="daymeta">Free Time + Breakfast start dari jam 07.00.</div>
+
+    <div class="slot highlight">
+      <div class="time">08.00–08.30</div>
+      <div class="content"><p class="label"><span class="tag mc">MC</span>Pagi Day 2 — Hendry & Andrew</p></div>
+    </div>
+
+    <div class="slot"><div class="time">09.00–10.00</div><div class="content"><p class="label"><span class="tag pw">PW</span>Sesi 3</p><p class="desc">WL: Nath — Gitar: Nath, Keyboard: Vina, Cajon: Jojo, Bass: Joko</p></div></div>
+    <div class="slot"><div class="time">10.00–10.30</div><div class="content"><p class="label">Sesi 3 — FT Thomas Ng</p></div></div>
+    <div class="slot"><div class="time">10.30–11.15</div><div class="content"><p class="label"><span class="tag game">Games</span>Games 4</p><p class="desc">Lead: Thomas & Jojo</p></div></div>
+    <div class="slot"><div class="time">11.15–12.00</div><div class="content"><p class="label"><span class="tag game">Games</span>Games 5</p></div></div>
+
+    <div class="slot highlight">
+      <div class="time">12.00–12.30</div>
+      <div class="content"><p class="label"><span class="tag mc">MC</span>Umumkan Lunch & Workshop</p><p class="desc">Lunch sampai jam 13.00. Jam 13.00 sudah harus kumpul di aula untuk Workshop.</p></div>
+    </div>
+
+    <div class="slot">
+      <div class="time">13.00–13.30</div>
+      <div class="content">
+        <p class="label"><span class="tag pw">PW</span>Sesi 4 <span class="tag mc">MC</span></p>
+        <p class="desc">WL: Alys — Gitar: Joko, Keyboard: Reka, Cajon: Didi, Bass: Nathan<br>1) Panggil Ko Thomas: <b>Testimony by Joko & Yenny + QnA</b></p>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="time">13.30–15.00</div>
+      <div class="content"><p class="label">Sesi Workshop</p><p class="desc">Dibagi beberapa kategori, dijelaskan oleh Thomas/Reka, per area per group → link ke WA Community.</p></div>
+    </div>
+
+    <div class="slot highlight">
+      <div class="time">15.00–15.30</div>
+      <div class="content"><p class="label"><span class="tag mc">MC</span>Isi Waktu</p><p class="desc">Quiz/testimony sambil panitia siapin peralatan games outdoor.</p></div>
+    </div>
+
+    <div class="slot"><div class="time">15.00–15.45</div><div class="content"><p class="label"><span class="tag game">Games</span>Games 6 (outdoor)</p><p class="desc">Sesi konsumsi siapin minuman outdoor.</p></div></div>
+    <div class="slot"><div class="time">15.45–16.30</div><div class="content"><p class="label"><span class="tag game">Games</span>Games 7</p></div></div>
+    <div class="slot"><div class="time">16.30–17.30</div><div class="content"><p class="label"><span class="tag game">Games</span>Games 8</p></div></div>
+
+    <div class="slot highlight">
+      <div class="time">17.30–18.00</div>
+      <div class="content"><p class="label"><span class="tag mc">MC</span>Umumkan Dinner</p><p class="desc">Free Time + Dinner sampai jam 19.00, kembali ke aula. → <i>Next session Day 2 malam: MC Andrew & Toge</i></p></div>
+    </div>
+
+    <div class="slot highlight">
+      <div class="time">19.00–19.30</div>
+      <div class="content"><p class="label"><span class="tag mc">MC</span>Andrew & Toge</p><p class="desc">Sesi FT: Jojo</p></div>
+    </div>
+
+    <div class="slot"><div class="time">20.00–20.30</div><div class="content"><p class="label">Bagi Gelang PW Night</p><p class="desc">Dari panitia (Yolanda & Lily → per team captain).</p></div></div>
+
+    <div class="slot">
+      <div class="time">20.30–22.30</div>
+      <div class="content">
+        <p class="label"><span class="tag pw">PW</span>PW Night</p>
+        <p class="desc">WL: Reka; Singer: Alysia, Vindo, Thomas; Keyboard: Vina; Gitar: Joko; Bass: Nathan; Cajon: Reo <i>(dresscode Tim PW: Black, Grey, White)</i>. Testimony kalau ada yang mau.</p>
+      </div>
+    </div>
+
+    <div class="slot highlight">
+      <div class="time">22.30–23.00</div>
+      <div class="content">
+        <p class="label"><span class="tag mc">MC</span>Closing Day 2</p>
+        <p class="desc">Info besok kumpul jam 09.00, sarapan sudah ada dari jam 07.00, pastikan barang sudah dipacking sebelum kumpul (biar cepat checkout), infokan besok pakai T-shirt Camp yang dibagikan di Day 1.</p>
+      </div>
+    </div>
+
+    <div class="quote-box">💡 Kalau MC mau improv testimony/quiz butuh hadiah → tersedia 3 hadiah per hari.</div>
+  </section>
+
+  <!-- DAY 3 -->
+  <section class="daypanel" id="day-3">
+    <div class="daymeta">Free Time + Breakfast start dari jam 07.00 — pastikan semua pakai T-shirt Camp.</div>
+
+    <div class="slot highlight">
+      <div class="time">09.00–10.00</div>
+      <div class="content"><p class="label"><span class="tag mc">MC</span><span class="tag pw">PW</span>Acoy & Andrew — Sesi 5 PW</p><p class="desc">WL: Lily — Gitar: Joko, Keyboard: Reo, Cajon: Jojo, Bass: Nathan</p></div>
+    </div>
+
+    <div class="slot"><div class="time">10.00–10.30</div><div class="content"><p class="label">Sesi 5 — Widi</p></div></div>
+
+    <div class="slot highlight">
+      <div class="time">10.30–11.30</div>
+      <div class="content">
+        <p class="label"><span class="tag mc">MC</span><span class="tag game">Games</span>Games 9 — Final Games</p>
+        <p class="desc">Pengumuman pemenang & pembagian hadiah. Closing dari MC: ucapan thank you buat semua yang melayani & semua peserta.</p>
+      </div>
+    </div>
+
+    <div class="slot highlight">
+      <div class="time">11.00–11.30</div>
+      <div class="content"><p class="label"><span class="tag mc">MC</span>Remind Kunci</p><p class="desc">Kunci kamar dikumpulkan ke panitia <i>(PIC: Andrew & Hary)</i>.</p></div>
+    </div>
+
+    <div class="slot"><div class="time">11.30–12.00</div><div class="content"><p class="label">Foto Bersama</p><p class="desc">Pakai baju seragam <i>(PIC: Didi & Jane)</i>.</p></div></div>
+    <div class="slot"><div class="time">12.00–12.30</div><div class="content"><p class="label">Lunch</p></div></div>
+    <div class="slot"><div class="time">12.30–13.00</div><div class="content"><p class="label">Sekalian Checkout</p></div></div>
+    <div class="slot"><div class="time">13.00–13.30</div><div class="content"><p class="label">Pulang</p><p class="desc">Panitia pastikan barang tidak ketinggalan & kunci sudah dikembalikan.</p></div></div>
+
+    <div class="quote-box">"See you next year! Thank you untuk semua pelayanannya 🙂<br>God Bless you guys."</div>
+  </section>
+
+  <!-- REFERENSI -->
+  <section class="daypanel" id="day-ref">
+    <h2 class="sectitle">Durasi Games</h2>
+    <table class="ref">
+      <tr><th>Games</th><th>Hari</th><th>Jam</th></tr>
+      <tr><td>Games 1</td><td>1</td><td>13.00–13.30</td></tr>
+      <tr><td>Games 2</td><td>1</td><td>13.30–14.00</td></tr>
+      <tr><td>Games 3</td><td>1</td><td>19.00–19.30</td></tr>
+      <tr><td>Games 4</td><td>2</td><td>10.30–11.15</td></tr>
+      <tr><td>Games 5</td><td>2</td><td>11.15–12.00</td></tr>
+      <tr><td>Games 6</td><td>2</td><td>15.00–15.45</td></tr>
+      <tr><td>Games 7</td><td>2</td><td>15.45–16.30</td></tr>
+      <tr><td>Games 8</td><td>2</td><td>16.30–17.30</td></tr>
+      <tr><td>Games 9 (Final)</td><td>3</td><td>10.30–11.30</td></tr>
+    </table>
+
+    <h2 class="sectitle">PIC Outing Camp 2026</h2>
+    <div class="picgrid">
+      <div class="piccard"><b>Panitia Team</b>Thomas Ng, Reka, Jojo, Vina, Hary, Lily, Andrew, Yolanda, Sandy, Widi</div>
+      <div class="piccard"><b>Usher</b>Lily & Yenny</div>
+      <div class="piccard"><b>WA Community Admin</b>Andrew, Reka, Yolanda, Hary, Jojo</div>
+      <div class="piccard"><b>Mulmed</b>Yolanda (slide: Amelia–Day1, Regina–Day2, Yolanda–Day3, laptop Amel)</div>
+      <div class="piccard"><b>Medis</b>Reka</div>
+      <div class="piccard"><b>Foto</b>Didi & Jane (GS); opening video & sameday edit: Didi</div>
+      <div class="piccard"><b>PW</b>Nathan, Vina, Reka, Joko</div>
+      <div class="piccard"><b>Perlengkapan</b>Hary (dibantu Kamto & Joko)</div>
+      <div class="piccard"><b>Konsumsi</b>Lily & Yenny</div>
+      <div class="piccard"><b>Floor Director</b>Andrew & Hary</div>
+      <div class="piccard"><b>Design</b>Yolanda, Sandy, Reka</div>
+      <div class="piccard"><b>Games</b>Jojo, Thomas, Hary, Kamto</div>
+    </div>
+
+    <h2 class="sectitle">Jadwal MC</h2>
+    <table class="ref">
+      <tr><th>Hari</th><th>Slot</th><th>MC</th></tr>
+      <tr><td>1</td><td>Opening – Sesi 1 (sebelum dinner)</td><td>Andrew</td></tr>
+      <tr><td>1</td><td>After Dinner – End</td><td>Acoy & Toge</td></tr>
+      <tr><td>2</td><td>Pagi – sebelum dinner</td><td>Hendry & Andrew</td></tr>
+      <tr><td>2</td><td>Khusus Workshop</td><td>Thomas & Reka</td></tr>
+      <tr><td>2</td><td>After Dinner – Till Drop</td><td>Andrew & Toge</td></tr>
+      <tr><td>3</td><td>Pagi – Closing</td><td>Ko Acoy & Andrew</td></tr>
+    </table>
+
+    <p style="font-size:13px; color:var(--ink-soft); margin-top:16px;">Kalau ada pertanyaan di luar rundown ini, bisa kontak <b>Jojo</b> (mewakili panitia).</p>
+  </section>
+
+</main>
+
+<footer>RUNDOWN OUTING FCTE 2026 · "RENEW" · ROMANS 12:2</footer>
+
+<script>
+  const buttons = document.querySelectorAll('.daynav button');
+  const panels = document.querySelectorAll('.daypanel');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('day-' + btn.dataset.day).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+</script>
+
+</body>
+</html>
